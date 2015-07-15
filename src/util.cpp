@@ -4,6 +4,7 @@
 #include <sstream>
 #include <sys/time.h>
 #include <wchar.h>
+#include <math.h>
 
 using namespace std;
 
@@ -18,10 +19,26 @@ double cur_time(){
 }
 
 
+//==========================
+//   Vector Operation
+//==========================
 
-//============================
+void normalize(std::vector<double> &vec){
+  double sum = 0;
+  for(auto it = vec.begin(); it != vec.end(); it++){
+    sum += (*it) * (*it);
+  }
+  sum = sqrt(sum);
+  for(auto it = vec.begin(); it != vec.end(); it++){
+    *it /= sum;
+  }
+}
+
+
+
+//==========================
 //   Multi-Byte String
-//===========================
+//==========================
 
 
 wstring widen(const std::string &src) 
@@ -102,12 +119,13 @@ string StringConverter::id2str(const int id) const{
 }
 
 
-void StringConverter::AddStr(const string &str){
+int StringConverter::AddStr(const string &str){
   if(m_str2id->find(str) == m_str2id->end()){
     (*m_str2id)[str] = m_count; 
     m_id2str->push_back(str);
     m_count++;
   }
+  return m_count-1;
 }
 
 

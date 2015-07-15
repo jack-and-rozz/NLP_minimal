@@ -1,6 +1,7 @@
 
 
 #include "util.h"
+#include "vector_distance.h"
 
 #include <iostream>
 #include <memory>
@@ -71,22 +72,24 @@ opts * parse_cmdline(int argc, char * const * argv, opts * o) {
 
 
 int main(int argc, char** argv){
-  
-  if (argc < 1){
-    exit(1);
+  string word;
+  if (argc > 1){
+    word = argv[1];
+  }else{
+    word = "a";
   }
   srand((unsigned int)(cur_time()));
 
   // opts o;
   // parse_cmdline(argc, argv, &o);
   // const string method = o.method;
-  auto sc = make_shared<StringConverter>();
-  sc->AddStr("word");
-  sc->AddStr("word");
-  cout << sc->id2str(0) <<endl;
-  cout << sc->GetCount() <<endl;
+
+
+  VectorDistanceTest("data/test.txt", word);
+
   return 0;
 }
+
 
 
 

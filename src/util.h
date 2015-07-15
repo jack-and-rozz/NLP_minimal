@@ -30,8 +30,11 @@ class StringConverter{
   virtual  ~StringConverter() = default;
   int str2id(const std::string &str) const;
   std::string id2str(const int id) const;
-  void AddStr(const std::string & str);
-  inline int GetCount(){return m_count;};
+  int AddStr(const std::string & str);
+  inline int GetCount() const {return m_count;};
 };
+
+
+void normalize(std::vector<double> &);
 
 #endif
