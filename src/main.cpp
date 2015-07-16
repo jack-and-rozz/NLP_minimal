@@ -88,9 +88,10 @@ int main(int argc, char** argv){
   srand((unsigned int)(cur_time()));
 
 
-
+  double t0 = cur_time();
   VectorDistanceTest(filename, word, o.n_top);
-
+  double t1 = cur_time();
+  cout << "Elapsed time : " << (t1-t0) << " sec" << endl;
   return 0;
 }
 
