@@ -18,11 +18,13 @@ using namespace std;
 //=========================
 
 struct opts {
-  const char * method;
-  int rareword_threshold;
+  const char * word;
+  const char * dataset;
+  int n_top;
   opts() {
-    method = "learn";
-    rareword_threshold = 10;
+    word = "cat";
+    dataset = "data/test.txt";
+    n_top = 5;
   }
 };
 
@@ -32,29 +34,34 @@ void usage(char * prog) {
   fprintf(stderr, "usage:\n");
   fprintf(stderr, "  %s [options]\n", prog);
   fprintf(stderr, "options:\n");
-  fprintf(stderr, "  -m,--method  (%s)\n", o.method);
-  fprintf(stderr, "  -t,--threshold  (%d)\n", o.rareword_threshold);
+  fprintf(stderr, "  -w,--word  (%s)\n", o.word);
+  fprintf(stderr, "  -d,--dataset  (%s)\n", o.dataset);
+  fprintf(stderr, "  -n,--n_top  (%d)\n", o.n_top);
 }
 
 opts * parse_cmdline(int argc, char * const * argv, opts * o) {
   static struct option long_options[] = {
-    {"method",     required_argument, 0, 'm' },
-    {"rareword_threshold",     required_argument, 0, 't' },
+    {"word",     required_argument, 0, 'w' },
+    {"dataset",     required_argument, 0, 'd' },
+    {"n_top",     required_argument, 0, 'n' },
     {0,         0,                 0,  0 }
   };
 
   while (1) {
     int option_index = 0;
-    int c = getopt_long(argc, argv, "m:t:",
+    int c = getopt_long(argc, argv, "w:d:n:",
 			long_options, &option_index);
     if (c == -1) break;
 
     switch (c) {
-    case 'm':
-      o->method = strdup(optarg);
+    case 'w':
+      o->word = strdup(optarg);
       break;
-    case 't':
-      o->rareword_threshold = atoi(strdup(optarg));
+    case 'd':
+      o->dataset = strdup(optarg);
+      break;
+    case 'n':
+      o->n_top = atoi(optarg);
       break;
     default:
       usage(argv[0]);
@@ -72,22 +79,17 @@ opts * parse_cmdline(int argc, char * const * argv, opts * o) {
 
 
 int main(int argc, char** argv){
-  string filename,word;
-  if (argc > 2){
-    filename = argv[1];
-    word = argv[2];
-  }else{
-    filename = "data/test.txt";
-    word = "cat";
-  }
+ 
+  opts o;
+  parse_cmdline(argc, argv, &o);
+  string filename = o.dataset;
+  string word = o.word;
+
   srand((unsigned int)(cur_time()));
 
-  // opts o;
-  // parse_cmdline(argc, argv, &o);
-  // const string method = o.method;
 
 
-  VectorDistanceTest(filename, word);
+  VectorDistanceTest(filename, word, o.n_top);
 
   return 0;
 }
