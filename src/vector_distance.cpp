@@ -9,6 +9,7 @@
 #include <iostream>
 #include <math.h>
 #include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -114,7 +115,7 @@ void VectorDistanceTest(const string & filename, const string & word, const int 
 
   cout << "< EuclideanDistance > "   << endl;
   for(auto it = res.begin(); it != res.end(); it++){
-    cout << sc->id2str(get<0>(*it)) << " : " << (get<1>(*it)) <<endl;
+    cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
   }
   cout << endl;
 
@@ -123,7 +124,7 @@ void VectorDistanceTest(const string & filename, const string & word, const int 
 
   cout << "< CosineSimilarity >" << endl;
   for(auto it = res.begin(); it != res.end(); it++){
-    cout << sc->id2str(get<0>(*it)) << " : " << (get<1>(*it)) <<endl;
+    cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
   }
 
 }
