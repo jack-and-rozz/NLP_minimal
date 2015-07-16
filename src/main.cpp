@@ -72,11 +72,13 @@ opts * parse_cmdline(int argc, char * const * argv, opts * o) {
 
 
 int main(int argc, char** argv){
-  string word;
-  if (argc > 1){
-    word = argv[1];
+  string filename,word;
+  if (argc > 2){
+    filename = argv[1];
+    word = argv[2];
   }else{
-    word = "a";
+    filename = "data/test.txt";
+    word = "cat";
   }
   srand((unsigned int)(cur_time()));
 
@@ -85,7 +87,7 @@ int main(int argc, char** argv){
   // const string method = o.method;
 
 
-  VectorDistanceTest("data/test.txt", word);
+  VectorDistanceTest(filename, word);
 
   return 0;
 }
