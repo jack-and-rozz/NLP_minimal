@@ -71,7 +71,7 @@ double CosineSimilarity(const WordVecPtr wv, const WordVecPtr wv2)
 }
 
 
-void VectorDistanceTest(const string & filename, const string & word, const int N){
+void VectorDistanceTest(const string & filename, string & word, const int N){
 
   ifstream ifs(filename);
   if(ifs.fail()){
@@ -99,33 +99,39 @@ void VectorDistanceTest(const string & filename, const string & word, const int 
   for(int i = 0; i < word_vecs.size(); i++){
     //ShowWordVec(sc->id2str(i), *word_vecs[i]);
   }
-  int target_id = sc->str2id(word);
 
-  if(target_id < 0){
-    cout <<  "Can't find the word [" << word << "]" << endl;
-    exit(1);
+
+  while(cin >> word){
+    int target_id = sc->str2id(word);
+
+    if(target_id < 0){
+      cout <<  "Can't find the word [" << word << "]" << endl;
+      continue;
+    }
+
+    auto res = FindSimilarWords(word_vecs, target_id, N, EuclideanDistance);
+
+    cout << "Target Word : [" << word << "]" <<endl;
+    cout << endl;
+
+    cout << "< EuclideanDistance > "   << endl;
+    for(auto it = res.begin(); it != res.end(); it++){
+      cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
+    }
+    cout << endl;
+
+    res = FindSimilarWords(word_vecs, target_id, N, CosineSimilarity);
+
+
+    cout << "< CosineSimilarity >" << endl;
+    for(auto it = res.begin(); it != res.end(); it++){
+      cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
+    }
+    cout << endl;
+    cout << "Input the target word ..."<< endl;
+
   }
-  
-  
 
-  auto res = FindSimilarWords(word_vecs, target_id, N, EuclideanDistance);
-
-  cout << "Target Word : [" << word << "]" <<endl;
-  cout << endl;
-
-  cout << "< EuclideanDistance > "   << endl;
-  for(auto it = res.begin(); it != res.end(); it++){
-    cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
-  }
-  cout << endl;
-
-  res = FindSimilarWords(word_vecs, target_id, N, CosineSimilarity);
-
-
-  cout << "< CosineSimilarity >" << endl;
-  for(auto it = res.begin(); it != res.end(); it++){
-    cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
-  }
 
 }
 
