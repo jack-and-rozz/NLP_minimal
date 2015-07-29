@@ -75,7 +75,7 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
 
   ifstream ifs(filename);
   if(ifs.fail()){
-    cout << "Failed to load n_gram data" << endl;
+    cout << "Failed to load the word vectors" << endl;
     exit(1);
   }
   string line;
@@ -101,6 +101,7 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
   }
 
 
+  cout << "Input the target word ..."<< endl;
   while(cin >> word){
     int target_id = sc->str2id(word);
 

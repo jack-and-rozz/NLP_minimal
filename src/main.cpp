@@ -49,7 +49,7 @@ opts * parse_cmdline(int argc, char * const * argv, opts * o) {
 
   while (1) {
     int option_index = 0;
-    int c = getopt_long(argc, argv, "w:d:n:",
+    int c = getopt_long(argc, argv, "hw:d:n:",
 			long_options, &option_index);
     if (c == -1) break;
 
@@ -63,6 +63,9 @@ opts * parse_cmdline(int argc, char * const * argv, opts * o) {
     case 'n':
       o->n_top = atoi(optarg);
       break;
+    case 'h':
+      usage(argv[0]);
+      exit(1);
     default:
       usage(argv[0]);
       exit(1);
