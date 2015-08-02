@@ -79,10 +79,12 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
     exit(1);
   }
   string line;
-
+  
   unique_ptr<StringConverter> sc = make_unique<StringConverter>();
 
   vector<WordVecPtr> word_vecs; 
+  double t0,t1;
+  t0 = cur_time();
   while(getline(ifs, line)){
     auto strv = split(line);
 
@@ -95,6 +97,8 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
     word_vecs.push_back(word_vec);
     sc->AddStr(strv[0]);
   }
+  t1 = cur_time();
+  printf("Elapsed time(WordVec Load): %.2f\n", t1-t0);
 
   for(int i = 0; i < word_vecs.size(); i++){
     //ShowWordVec(sc->id2str(i), *word_vecs[i]);
@@ -110,20 +114,19 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
       continue;
     }
 
-    auto res = FindSimilarWords(word_vecs, target_id, N, EuclideanDistance);
-
+    
     cout << "Target Word : [" << word << "]" <<endl;
     cout << endl;
 
-    cout << "< EuclideanDistance > "   << endl;
-    for(auto it = res.begin(); it != res.end(); it++){
-      cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
-    }
+    //auto res = FindSimilarWords(word_vecs, target_id, N, EuclideanDistance);
+    //cout << "< EuclideanDistance > "   << endl;
+    //for(auto it = res.begin(); it != res.end(); it++){
+    //  cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
+    //}
     cout << endl;
 
-    res = FindSimilarWords(word_vecs, target_id, N, CosineSimilarity);
 
-
+    auto res = FindSimilarWords(word_vecs, target_id, N, CosineSimilarity);
     cout << "< CosineSimilarity >" << endl;
     for(auto it = res.begin(); it != res.end(); it++){
       cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
