@@ -98,7 +98,7 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
     sc->AddStr(strv[0]);
   }
   t1 = cur_time();
-  printf("Elapsed time(WordVec Load): %.2f\n", t1-t0);
+  printf("Elapsed time(WordVec Load): %.2f \n", t1-t0);
 
   for(int i = 0; i < word_vecs.size(); i++){
     //ShowWordVec(sc->id2str(i), *word_vecs[i]);
