@@ -71,23 +71,35 @@ double CosineSimilarity(const WordVecPtr wv, const WordVecPtr wv2)
 }
 
 
-void VectorDistanceTest(const string & filename, string & word, const int N){
+void VectorDistanceTest(const string & filename, const int N, const string & sentence_file){
+  string line;  
+  unique_ptr<StringConverter> sc = make_unique<StringConverter>();
+  vector<WordVecPtr> word_vecs; 
+  vector<string> sentences;
+  double t0,t1;
 
-  ifstream ifs(filename);
-  if(ifs.fail()){
+  // 文ベクトルの場合元テキストをロード
+  if (sentence_file != ""){
+    ifstream sent_file(sentence_file);
+    if(sent_file.fail()){
+      cout << "Failed to load the original sentence file" << endl;
+      exit(1);
+    }
+    while(getline(sent_file, line)){
+      sentences.push_back(line);
+    }
+  }
+
+  // 単語ベクトルのロード
+  t0 = cur_time();
+  ifstream vec_file(filename);
+  if(vec_file.fail()){
     cout << "Failed to load the word vectors" << endl;
     exit(1);
   }
-  string line;
-  
-  unique_ptr<StringConverter> sc = make_unique<StringConverter>();
 
-  vector<WordVecPtr> word_vecs; 
-  double t0,t1;
-  t0 = cur_time();
-  while(getline(ifs, line)){
+  while(getline(vec_file, line)){
     auto strv = split(line);
-
     auto word_vec = make_shared<WordVec>();
 
     for(auto it = strv.begin()+1; it < strv.end(); it++){
@@ -98,38 +110,47 @@ void VectorDistanceTest(const string & filename, string & word, const int N){
     sc->AddStr(strv[0]);
   }
   t1 = cur_time();
-  printf("Elapsed time(WordVec Load): %.2f \n", t1-t0);
+  printf("Elapsed time(Load files): %.2f \n", t1-t0);
 
-  for(int i = 0; i < word_vecs.size(); i++){
+  //for(int i = 0; i < word_vecs.size(); i++){
     //ShowWordVec(sc->id2str(i), *word_vecs[i]);
-  }
+  //}
 
-
+  string word;
   cout << "Input the target word ..."<< endl;
   while(cin >> word){
     int target_id = sc->str2id(word);
 
     if(target_id < 0){
-      cout <<  "Can't find the word [" << word << "]" << endl;
+      cout <<  "Can't find the token [" << word << "]" << endl;
       continue;
     }
 
-    
-    cout << "Target Word : [" << word << "]" <<endl;
-    cout << endl;
+    if (sentence_file == ""){
+      cout << "Target Word : [" << word << "]" <<endl;
+      cout << endl;
+    }else{
+      cout << "Target Sentence : [" << sentences[target_id] << "]" <<endl;
+      cout << endl;
+    }
 
     //auto res = FindSimilarWords(word_vecs, target_id, N, EuclideanDistance);
     //cout << "< EuclideanDistance > "   << endl;
     //for(auto it = res.begin(); it != res.end(); it++){
     //  cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
     //}
-    cout << endl;
 
 
     auto res = FindSimilarWords(word_vecs, target_id, N, CosineSimilarity);
     cout << "< CosineSimilarity >" << endl;
-    for(auto it = res.begin(); it != res.end(); it++){
-      cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
+    if (sentence_file == ""){
+      for(auto it = res.begin(); it != res.end(); it++){
+	cout << (it - res.begin()) << ": " << setw(10) << sc->id2str(get<0>(*it)) << " ... " << (get<1>(*it)) <<endl;
+      }
+    }else{
+      for(auto it = res.begin(); it != res.end(); it++){
+	cout << (it - res.begin()) << ": " << setw(10) << sentences[get<0>(*it)] << " ... " << (get<1>(*it)) <<endl;
+      }
     }
     cout << endl;
     cout << "Input the target word ..."<< endl;

@@ -13,11 +13,11 @@ CXXFLAGS := $(opts)
 
 
 
-a.out : clean
+vector_similarity : clean
 	$(CXX) -o $@ $(CXXFLAGS) $(cpp_files)  $(h_files)
 
 clean :
-	rm -f a.out
+	rm -f vector_similarity
 	rm -f test
 	rm -f debug
 	rm -rf *.dSYM

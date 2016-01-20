@@ -2,5 +2,5 @@
 
 #include <string>
 
-void VectorDistanceTest(const std::string &, std::string & , const int);
+void VectorDistanceTest(const std::string &, const int, const std::string &);
 
