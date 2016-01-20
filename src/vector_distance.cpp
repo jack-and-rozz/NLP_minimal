@@ -97,8 +97,9 @@ void VectorDistanceTest(const string & filename, const int N, const string & sen
     cout << "Failed to load the word vectors" << endl;
     exit(1);
   }
-
+  int c = 0;
   while(getline(vec_file, line)){
+    if (c == 0){ c++; continue;} // ベクトルファイルの初めの一行目は行数・次元の情報なので読み飛ばす
     auto strv = split(line);
     auto word_vec = make_shared<WordVec>();
 
